@@ -1,8 +1,8 @@
 ---
-title: "Entrega Final R4DS2"
+title: "Entrega final R para Ciência de Dados 2"
 author: "Alessandra Ribeiro"
 date: "14/09/2020"
-output: pdf_document
+output: html_document
 ---
 
 # Entrega Final R para Ciência de Dados II
