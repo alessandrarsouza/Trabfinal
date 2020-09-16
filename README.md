@@ -155,10 +155,11 @@ acordo com o banco.
 
 ### Conclusão
 
-Com base no que foi discorrido, não é possível com os dados levantados
-explicar a relação entre populismo e ideologia. Para os limites do
-presente trabaho, um exercício mais oportuno consiste no levantamento de
-problemas e hipóteses para futuras análises.
+Entende-se que exercício de análise empreendido foi oportuno para o
+levantamento de problemas e hipóteses para análises futuras. Planejo
+continuar trabalhando com o índice de populismo para associá-lo a outras
+variáveis partidárias, como forma de entender as relações com o
+posicionamento ideológico.
 
 ### Bibliografia
 
