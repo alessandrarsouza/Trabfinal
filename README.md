@@ -1,0 +1,180 @@
+
+## Populismo e Ideologia no Brasil (1999 - 2019)
+
+### Introdução
+
+O presente relatório trata-se de uma atividade avaliativa para conclusão
+do curso “R para Ciência de Dados II” oferecido pelos professores Caio
+Lente e William Amorim. O objetivo deste relatório é apresentar uma
+análise de ciência de dados utilizando da linguagem R. Dessa forma,
+escolhi analisar a relação entre populismo e ideologia no executivo
+federal brasileiro. O banco de dados escolhido foi o “*Global Populism
+Database*”, desenvolvido pelos pesquisadores Hawkins, Kirk A., Rosario
+Aguilar, Erin Jenne, Bojana Kocijan, Cristóbal Rovira Kaltwasser e Bruno
+Castanho Silva.
+
+O banco tem como objetivo mensurar o quanto os presidentes e primeiros
+ministros de países ao redor do mundo são populistas. Nesta análise
+estão representados 40 países com observações no período de 2000 a
+2019. Como forma de operacionalizar o conceito de populismo, os
+pesquisadores analisaram discursos públicos dos dirigentes nacionais
+destacando uma retórica que mobiliza “a vontade das pessoas comuns em
+conflito com elites conspiradoras” (Hawkins, K. et al., 2019, p. 2).
+Esses critérios estão alinhados à definição de Mudde (2004, apud
+Taggart, 2018, p. 80), amplamente aceita no campo de estudos sobre
+populismo. Segundo o autor, o populismo é uma ideologia que considera
+que a sociedade é separada em dois grupos homogêneos e antagônicos: “o
+povo puro” contra “a elite corrupta”, no qual se argumenta que a
+política deve ser uma expressão da vontade geral do povo (Mudde, 2004
+apud Taggart, 2018, p. 80).
+
+Dessa forma, com base nos critérios acima descritos, os pesquisadores
+atribuíram pesos aos discursos para a construção de um índice que varia
+entre 0,0 – 0,4 (Not Populist), 0,5 – 0,9 (Somewhat Populist), 1,0 – 1,3
+(Populist), 1,5 – 1,9 (Very Populist). Além disso, a base também contém
+strings sobre países, regiões (Europe and Central Asia, Latin America
+and Caribbean, North America e South Asia), nome do líder e partido.
+Entre as variáveis numéricas, estão: um índice de espectro político,
+indo de -1 a 1 (correspondendo à esquerda e direita, respectivamente).
+Uma outra variável dicotômica informa se o líder político é presidente
+ou primeiro ministro, sendo atribuído 1 e 0 respectivamente.
+
+O objetivo desta análise é relacionar o grau de populismo à ideologia
+política dos presidentes do Brasil entre 1999 e 2019. A análise abarca
+cinco diferentes representantes: Fernando Henrique Cardoso, Lula (no
+banco, os mandatos de Lula aparecem como uma única variável), Dilma
+(diferentemente, os mandatos de Dilma foram separados), Michel Temer e
+Jair Bolsonaro.
+
+Por ideologia, entendo a posição de um representante em um espectro
+político que varia em esquerda, centro e direita. A operacionalização
+desse conceito não é consenso nos estudos políticos e, infelizmente, não
+tive acesso à construção do índice no banco utilizado. Avalio que para
+futuras análises é imprescindível acessar conhecer a forma a qual este
+índice foi calculado.
+
+Por fim, analisar a relação entre populismo e ideologia é
+particularmente interessante quando comparamos Lula e Bolsonaro, dois
+representantes frequentemente avaliados como populistas e que
+posicionam-se em pólos opostos do espectro político.
+
+### Resultados
+
+Em um primeiro momento, carrego os pacotes que serão utilizados na
+análise.
+
+``` r
+library(dplyr)
+library(ggplot2)
+library(readxl)
+library(janitor)
+```
+
+A base de dados *Global Populism Database* estava disponível em planilha
+Excel. Abaixo realizo a importação da base, filtrando apenas observações
+de presidentes brasileiros.
+
+``` r
+caminho <- "data-raw/Populist speech data.xlsx"
+
+pop_br <- read_excel(caminho) %>%
+  filter(country == "Brazil") %>%
+  clean_names()
+```
+
+O primeiro resultado é uma série histórica que indica a variação do grau
+de populismo no Brasil desde FHC até Bolsonaro. O eixo x apresenta a
+mudança dos mandatos por ano, nomeadas pelos respectivos presidentes. O
+eixo y contém o índice de populismo. O gráfico mostra que Lula, Dilma no
+segundo mandato e Bolsorano apresentaram algum grau de populismo. FHC,
+Temer e Dilma no primeiro mandato não aparecem no gráfico porque
+identificou-se um grau 0 de populismo. No entanto, para a categorização
+do *Global Populism Database*, apenas Bolsonaro pode ser considerado em
+alguma medida populista (somewhat populist).
+
+``` r
+ggplot(data = pop_br, aes(
+  x = code_year,
+  y = average_score,
+  fill = speech_category)) +
+  geom_col() +
+  labs(x = "Presidentes",
+       y = "Grau de populismo",
+       title = "Populismo no Brasil (1999 - 2019)",
+       fill = "") +
+    scale_fill_manual(values = c("snow3", "snow4")) +
+    scale_x_continuous(breaks = pop_br$code_year,
+                       labels = pop_br$leader) +
+  theme_minimal() +
+  theme(
+    legend.position = "bottom", plot.title = element_text(hjust = 0.5, size = 12))
+```
+
+![](README_files/figure-gfm/unnamed-chunk-3-1.png)<!-- -->
+
+É possível observar que nos últimos anos de governo (2015 e 2016), Dilma
+foi mais populista que Lula. Podemos levantar a hipótese de que diante
+do momento de fragilidade colocado pelo impeachment, Dilma intensificou
+o apelo às suas bases evocando a retórica populista, diferentemente dos
+anos iniciais, em que a ex-presidenta teve maior governabilidade. Outro
+aspecto que destaco é que Lula, embora apresente falas populistas, não
+foi classificado como um representante populista. O dado que o banco
+apresenta a esse respeito vai contra a afirmação que equipara Lula e
+Bolsonaro em termos de populismo (apenas um exemplo:
+<https://istoe.com.br/populismo-economico-de-bolsonaro-e-igual-ao-de-lula/>).
+
+``` r
+ggplot(data = pop_br, aes(
+    x = code_year,
+    y = average_score,
+    fill = ideol_category)) +
+    geom_col() +
+    labs(x = "Presidentes",
+         y = "Grau de populismo",
+         title = "Populismo e ideologia no Brasil (1999 - 2019)",
+         fill = "Ideologia") +
+    scale_fill_manual(values = c("seagreen3", "skyblue3", "tomato2")) +
+    scale_x_continuous(breaks = pop_br$code_year,
+                       labels = pop_br$leader) +
+    theme_minimal() +
+    theme(legend.position = "bottom",
+          plot.title = element_text(hjust = 0.5, size = 12))
+```
+
+![](README_files/figure-gfm/unnamed-chunk-4-1.png)<!-- -->
+
+No gráfico acima envidencio a variável ideologia. O índice a respeito do
+espectro político classifica FHC e Michel Temer como centro, Lula e
+Dilma como esquerda e Bolsonaro como direita. Essa observação levanta a
+questão do populismo de esquerda x populismo de direita. Se coloca como
+um obstáculo à interpretação do populismo a associação automática a
+partidos de extrema direita ou líderes carismáticos (Vittori, 2017).
+Embora Lula não tenha sido categorizado como populista, líderes de
+esquerda como Evo Moralez e Hugo Chávez apresentam-se como populistas de
+acordo com o banco.
+
+### Conclusão
+
+Com base no que foi discorrido, não é possível com os dados levantados
+explicar a relação entre populismo e ideologia. Para os limites do
+presente trabaho, um exercício mais oportuno consiste no levantamento de
+problemas e hipóteses para futuras análises.
+
+### Bibliografia
+
+Hawkins, K. A., Aguilar, R., Castanho Silva, B., Jenne, E. K., Kocijan,
+B., and Rovira Kaltwasser, C. 2019. “Measuring Populist Discourse: The
+Global Populism Database”. Paper presented at the 2019 EPSA Annual
+Conference in Belfast, UK, June 20-22.
+
+Taggart, Paul. (2018). Populism and ‘unpolitics’. In G. Fitzi, J.
+Mackert, & B. S. Turner (Eds.), *Populism and the crisis of democracy.
+Volume 1: Concepts and theory* (pp. 79–87). New York, NY: Routledge.
+
+Vittori, Davide. Reconceituando o populismo: construindo um conceito
+multifacetado mais estrito. Estudos Eleitorais no Mundo, 2017, Volume 12
+– nº 3.
+
+<https://populism.byu.edu/Pages/Data>
+
+<https://noticias.uol.com.br/politica/ultimas-noticias/2019/04/04/jair-bolsonaro-populista-fernando-collor-pesquisa-bruno-castanho.htm>

@@ -1,8 +1,5 @@
 ---
-title: "Entrega final R para Ciência de Dados II"
-author: "Alessandra Ribeiro"
-date: "14/09/2020"
-output: html_document
+output: github_document
 ---
 
 ## Populismo e Ideologia no Brasil (1999 - 2019)
@@ -89,6 +86,7 @@ ggplot(data = pop_br, aes(
     theme(legend.position = "bottom",
           plot.title = element_text(hjust = 0.5, size = 12))
 ```
+  
   No gráfico acima envidencio a variável ideologia. O índice a respeito do espectro político classifica FHC e Michel Temer como centro, Lula e Dilma como esquerda e Bolsonaro como direita.
   Essa observação levanta a questão do populismo de esquerda x populismo de direita. Se coloca como um obstáculo à interpretação do populismo a associação automática a partidos de extrema direita ou líderes carismáticos (Vittori, 2017). Embora Lula não tenha sido categorizado como populista, líderes de esquerda como Evo Moralez e Hugo Chávez apresentam-se como populistas de acordo com o banco.
  
